@@ -1,0 +1,124 @@
+service: staff-scheduler-backend
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: ap-south-1
+  stage: ${opt:stage, 'dev'}
+  environment:
+    STAGE: ${self:provider.stage}
+    REGION: ${self:provider.region}
+    HTTP_ENDPOINT: 'https://api.example.com/myendpoint'
+
+resources:
+  Resources:
+    mainTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+          - AttributeName: sk
+            AttributeType: S
+          - AttributeName: gsi_pk_1
+            AttributeType: S
+          - AttributeName: gsi_sk_1
+            AttributeType: S
+          - AttributeName: gsi_pk_2
+            AttributeType: S
+          - AttributeName: gsi_sk_2
+            AttributeType: S
+        BillingMode: PAY_PER_REQUEST
+        GlobalSecondaryIndexes:
+          - IndexName: gsi_1
+            KeySchema:
+              - AttributeName: gsi_pk_1
+                KeyType: HASH
+              - AttributeName: gsi_sk_1
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+          - IndexName: gsi_2
+            KeySchema:
+              - AttributeName: gsi_pk_2
+                KeyType: HASH
+              - AttributeName: gsi_sk_2
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+          - AttributeName: sk
+            KeyType: RANGE
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
+        TableName: ${self:provider.stage}-schedule
+
+    MyApiGateway:
+      Type: AWS::ApiGateway::RestApi
+      Properties:
+        Name: ${self:provider.stage}-${self:service}
+    MyApiResource:
+      Type: AWS::ApiGateway::Resource
+      Properties:
+        RestApiId:
+          Ref: MyApiGateway
+        ParentId:
+          Fn::GetAtt:
+            - MyApiGateway
+            - RootResourceId
+        PathPart: 'scheduler'
+    MyGetMethod:
+      Type: AWS::ApiGateway::Method
+      Properties:
+        RestApiId:
+          Ref: MyApiGateway
+        ResourceId:
+          Ref: MyApiResource
+        HttpMethod: 'GET'
+        AuthorizationType: NONE
+        Integration:
+          Type: HTTP_PROXY
+          IntegrationHttpMethod: GET
+          Uri: ${self:provider.environment.HTTP_ENDPOINT}
+    MyPostMethod:
+      Type: AWS::ApiGateway::Method
+      Properties:
+        RestApiId:
+          Ref: MyApiGateway
+        ResourceId:
+          Ref: MyApiResource
+        HttpMethod: 'POST'
+        AuthorizationType: AWS_IAM
+        Integration:
+          Type: HTTP_PROXY
+          IntegrationHttpMethod: POST
+          Uri: ${self:provider.environment.HTTP_ENDPOINT}
+    MyPutMethod:
+      Type: AWS::ApiGateway::Method
+      Properties:
+        RestApiId:
+          Ref: MyApiGateway
+        ResourceId:
+          Ref: MyApiResource
+        HttpMethod: 'PUT'
+        AuthorizationType: AWS_IAM
+        Integration:
+          Type: HTTP_PROXY
+          IntegrationHttpMethod: PUT
+          Uri: ${self:provider.environment.HTTP_ENDPOINT}
+    MyDeleteMethod:
+      Type: AWS::ApiGateway::Method
+      Properties:
+        RestApiId:
+          Ref: MyApiGateway
+        ResourceId:
+          Ref: MyApiResource
+        HttpMethod: 'DELETE'
+        AuthorizationType: AWS_IAM
+        Integration:
+          Type: HTTP_PROXY
+          IntegrationHttpMethod: DELETE
+          Uri: ${self:provider.environment.HTTP_ENDPOINT}

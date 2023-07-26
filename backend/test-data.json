@@ -1,0 +1,12 @@
+{
+  "schedule": [
+    {
+      "userId": "1",
+      "date": "2023-07-27",
+      "slots": {
+        "startTimeStamp": 1690437600,
+        "endTimeStamp": 1690473600
+      }
+    }
+  ]
+}
