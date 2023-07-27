@@ -7,4 +7,11 @@ export REGION=ap-south-1
 # docker tag ${self:service}-repo:latest ${AWS::AccountId}.dkr.ecr.${self:provider.region}.amazonaws.com/${self:service}-repo:latest
 # docker push $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$SERVICE-repo:latest
 
+cd ./vpc-infra
 npm run deploy-infra
+
+cd ../backend
+npm run deploy-infra
+
+cd ..
+

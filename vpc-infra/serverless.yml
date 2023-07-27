@@ -1,4 +1,4 @@
-service: staff-scheduler
+service: stf-sch-infra
 frameworkVersion: '3'
 
 provider:
@@ -125,3 +125,16 @@ resources:
           Type: HTTP_PROXY
           IntegrationHttpMethod: DELETE
           Uri: !Sub "http://${StaffSchedulerElb.DNSName}/schedule"
+
+  Outputs:
+    StaffSchedulerTargetGroupArn:
+      Value:
+        Ref: StaffSchedulerTargetGroup
+      Export:
+        Name: StaffSchedulerTargetGroupArn
+
+    MyApiGatewayId:
+      Value:
+        Ref: MyApiGateway
+      Export:
+        Name: MyApiGatewayId
