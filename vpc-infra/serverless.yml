@@ -1,0 +1,127 @@
+service: staff-scheduler
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: ap-south-1
+  stage: ${opt:stage, 'dev'}
+  environment:
+    STAGE: ${self:provider.stage}
+    REGION: ${self:provider.region}
+    HTTP_ENDPOINT: 'http://13.127.2.248/schedule'
+
+plugins:
+  - '@hybridless/serverless-ecs-plugin'
+  - serverless-pseudo-parameters
+
+custom:
+  aws:
+    profile: personal
+    accountId: 343547439778
+  service: 
+    port: 8080
+
+resources:
+  Resources:
+    StaffSchedulerListener:
+      Type: AWS::ElasticLoadBalancingV2::Listener
+      Properties:
+        LoadBalancerArn: !Ref StaffSchedulerElb
+        Protocol: HTTP
+        Port: 80
+        DefaultActions:
+          - Type: forward
+            TargetGroupArn: !Ref StaffSchedulerTargetGroup
+
+    StaffSchedulerTargetGroup:
+      Type: AWS::ElasticLoadBalancingV2::TargetGroup
+      Properties:
+        Name: ${self:service}-target-group
+        Port: 80
+        Protocol: HTTP
+        VpcId: vpc-06906dc6ed93509c5  # Replace with the ID of your VPC
+        TargetType: ip
+        HealthCheckPath: /health-check
+
+    StaffSchedulerElb:
+      Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+      Properties:
+        Name: ${self:service}-elb
+        Scheme: internet-facing
+        IpAddressType: ipv4
+        Type: application 
+        Subnets:
+          - subnet-0f2f0f3511b92435f
+          - subnet-03130abf6efde5935
+          - subnet-0b25b3474b72782cf
+        SecurityGroups:
+          - sg-0976513226a6d611a
+
+    MyApiGateway:
+      Type: AWS::ApiGateway::RestApi
+      Properties:
+        Name: ${self:provider.stage}-${self:service}
+
+    MyApiResource:
+      Type: AWS::ApiGateway::Resource
+      Properties:
+        RestApiId:
+          Ref: MyApiGateway
+        ParentId:
+          Fn::GetAtt:
+            - MyApiGateway
+            - RootResourceId
+        PathPart: 'scheduler'
+    MyGetMethod:
+      Type: AWS::ApiGateway::Method
+      Properties:
+        RestApiId:
+          Ref: MyApiGateway
+        ResourceId:
+          Ref: MyApiResource
+        HttpMethod: 'GET'
+        AuthorizationType: NONE
+        Integration:
+          Type: HTTP_PROXY
+          IntegrationHttpMethod: GET
+          Uri: !Sub "http://${StaffSchedulerElb.DNSName}/schedule"
+    MyPostMethod:
+      Type: AWS::ApiGateway::Method
+      Properties:
+        RestApiId:
+          Ref: MyApiGateway
+        ResourceId:
+          Ref: MyApiResource
+        HttpMethod: 'POST'
+        AuthorizationType: AWS_IAM
+        Integration:
+          Type: HTTP_PROXY
+          IntegrationHttpMethod: POST
+          Uri: !Sub "http://${StaffSchedulerElb.DNSName}/schedule"
+    MyPutMethod:
+      Type: AWS::ApiGateway::Method
+      Properties:
+        RestApiId:
+          Ref: MyApiGateway
+        ResourceId:
+          Ref: MyApiResource
+        HttpMethod: 'PUT'
+        AuthorizationType: AWS_IAM
+        Integration:
+          Type: HTTP_PROXY
+          IntegrationHttpMethod: PUT
+          Uri: !Sub "http://${StaffSchedulerElb.DNSName}/schedule"
+    MyDeleteMethod:
+      Type: AWS::ApiGateway::Method
+      Properties:
+        RestApiId:
+          Ref: MyApiGateway
+        ResourceId:
+          Ref: MyApiResource
+        HttpMethod: 'DELETE'
+        AuthorizationType: AWS_IAM
+        Integration:
+          Type: HTTP_PROXY
+          IntegrationHttpMethod: DELETE
+          Uri: !Sub "http://${StaffSchedulerElb.DNSName}/schedule"
