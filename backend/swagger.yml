@@ -1,0 +1,354 @@
+openapi: 3.0.0
+info:
+  title: Staff Scheduler Service
+  version: 1.0.0
+  description: API for managgin staff schedules
+
+paths:
+  /analytics:
+    post:
+      summary: Get aggregated hours by users
+      description: |
+        Retrieves aggregated hours by users within a specified date range.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetAnalyticsRequest'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserAnalytics'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+
+  /schedule:
+    post:
+      summary: Get schedule data
+      description: |
+        Retrieves schedule data for a user within a specified date range.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetScheduleRequest'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScheduleData'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+
+    put:
+      summary: Create a new schedule
+      description: |
+        Creates a new schedule entry for a user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutScheduleRequest'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+
+    delete:
+      summary: Delete a schedule entry
+      description: |
+        Deletes a schedule entry for a user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteScheduleRequest'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+
+  /user:
+    get:
+      summary: Get all users
+      description: |
+        Retrieves a list of all users.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserData'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+
+    delete:
+      summary: Delete a user
+      description: |
+        Deletes a user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteUserRequest'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+
+components:
+  schemas:
+    UserData:
+      type: object
+      properties:
+        username:
+          type: string
+          description: The username of the user.
+          example: 'john_doe'
+        name:
+          type: string
+          description: The name of the user.
+          example: 'John Doe'
+        sub:
+          type: string
+          description: The unique identifier of the user.
+          example: 'b72d530a-01ff-46ac-bc40-a2044f30fced'
+
+      required:
+        - username
+        - name
+        - sub
+
+    DeleteUserRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          description: The username of the user to delete.
+          example: 'john_doe'
+      required:
+        - username
+
+    GetScheduleRequest:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: The user ID.
+          example: 'b72d530a-01ff-46ac-bc40-a2044f30fced'
+        startDate:
+          type: string
+          format: date
+          description: The start date for the date range (YYYY-MM-DD).
+          example: '2023-01-01'
+        endDate:
+          type: string
+          format: date
+          description: The end date for the date range (YYYY-MM-DD).
+          example: '2023-01-31'
+      required:
+        - userId
+        - startDate
+        - endDate
+
+    PutScheduleRequest:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: The user ID.
+          example: 'b72d530a-01ff-46ac-bc40-a2044f30fced'
+        hours:
+          type: number
+          description: The number of hours for the schedule entry.
+          example: 6
+        date:
+          type: string
+          format: date
+          description: The date for the schedule entry (YYYY-MM-DD).
+          example: '2023-07-15'
+      required:
+        - userId
+        - date
+
+    DeleteScheduleRequest:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: The user ID.
+          example: 'b72d530a-01ff-46ac-bc40-a2044f30fced'
+        scheduleDate:
+          type: string
+          format: date
+          description: The date of the schedule entry to delete (YYYY-MM-DD).
+          example: '2023-07-15'
+      required:
+        - userId
+        - scheduleDate
+
+    ScheduleData:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: The user ID.
+          example: 'b72d530a-01ff-46ac-bc40-a2044f30fced'
+        scheduleDate:
+          type: string
+          format: date
+          description: The date of the schedule entry (YYYY-MM-DD).
+          example: '2023-07-15'
+        hours:
+          type: number
+          description: The number of hours for the schedule entry.
+          example: 6
+      required:
+        - userId
+        - scheduleDate
+        - hours
+
+    GetAnalyticsRequest:
+      type: object
+      properties:
+        startDate:
+          type: string
+          format: date
+          description: The start date for the date range (YYYY-MM-DD).
+          example: '2023-01-01'
+        endDate:
+          type: string
+          format: date
+          description: The end date for the date range (YYYY-MM-DD).
+          example: '2023-01-31'
+      required:
+        - startDate
+        - endDate
+
+    UserAnalytics:
+      type: object
+      properties:
+        username:
+          type: string
+          description: The user name.
+          example: 'b72d530a-01ff-46ac-bc40-a2044f30fced'
+        name:
+          type: string
+          description: The user full name.
+          example: 'b72d530a-01ff-46ac-bc40-a2044f30fced'
+        sub:
+          type: string
+          description: The user ID.
+          example: 'b72d530a-01ff-46ac-bc40-a2044f30fced'
+        totalHours:
+          type: number
+          description: The total hours aggregated for the user.
+          example: 25
+      required:
+        - username
+        - name
+        - sub

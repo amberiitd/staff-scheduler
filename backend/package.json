@@ -7,7 +7,7 @@
     "test": "mocha test/*.test.js",
     "deploy-infra": "sls deploy --aws-profile personal",
     "start": "nodemon ./js/server.js",
-    "dev": "tsc; nodemon ./js/server.js"
+    "dev": "tsc; cp ./swagger.yml ./js/swagger.yml; nodemon ./js/server.js"
   },
   "author": "amberiitd",
   "license": "ISC",
@@ -30,10 +30,14 @@
     "serverless": "^3.33.0",
     "serverless-pseudo-parameters": "^2.6.1",
     "sinon": "^15.2.0",
-    "typescript": "^4.8.2"
+    "swagger-ui-express": "^5.0.0",
+    "typescript": "^4.8.2",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",
-    "@types/jest": "^29.5.3"
+    "@types/jest": "^29.5.3",
+    "@types/swagger-ui-express": "^4.1.3",
+    "@types/yamljs": "^0.2.31"
   }
 }

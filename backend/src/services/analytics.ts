@@ -16,7 +16,7 @@ export async function aggregateHoursByUsers({
 
   const usersMap = Object.assign(
 		{},
-		...users.map((user: any) => ({ [user.sub]: user }))
+		...users.map((user: any) => ({ [user.sub]: {...user, totalHours: 0} }))
 	);
 	const params = {
 		TableName: TABLE,

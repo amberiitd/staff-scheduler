@@ -20,7 +20,7 @@ function aggregateHoursByUsers({ startDate, endDate, }) {
             throw Error("InvalidPayload");
         }
         const users = (yield (0, user_1.getAllUsers)()) || [];
-        const usersMap = Object.assign({}, ...users.map((user) => ({ [user.sub]: user })));
+        const usersMap = Object.assign({}, ...users.map((user) => ({ [user.sub]: Object.assign(Object.assign({}, user), { totalHours: 0 }) })));
         const params = {
             TableName: TABLE,
             FilterExpression: "sk BETWEEN :fromDate AND :toDate",
