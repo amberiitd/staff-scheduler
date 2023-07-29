@@ -41,7 +41,8 @@ Before you begin, make sure you have the following prerequisites in place:
 
 1. Create an AWS VPC, and at least one public subnet.
 2. Go through `serverless.yml` file inside `./backend` and `./vpc-infra` folders and replace necessary configuaration parameters like, AWS region, deployment stage etc.
-3. 
+3. Replace the vpcId and subnetIds in the `serverless.yml` file in `./vpc-infra`
+4. 
 
 
     

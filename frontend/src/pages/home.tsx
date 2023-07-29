@@ -130,7 +130,7 @@ const HomePage = () => {
 									});
 							})}
 						>
-							<Typography variant="h4">CREATE/UPDATE</Typography>
+							<Typography variant="h4">CREATE/UPDATE SCHEDULES</Typography>
 							<Stack spacing={2} width={300}>
 								<Controller
 									control={control}
@@ -197,7 +197,7 @@ const HomePage = () => {
 
 					<Box marginTop={5} width={300}>
 						<Typography variant="h4" marginBottom={2}>
-							VIEW
+							VIEW SCHEDULES
 						</Typography>
 						<LocalizationProvider dateAdapter={AdapterDayjs}>
 							<DateRangePicker

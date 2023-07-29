@@ -8,11 +8,15 @@ aws ecr get-login-password --region $REGION --profile $AWS_PROFILE | docker logi
 docker tag $SERVICE-repo:latest $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$SERVICE-repo:latest
 docker push $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$SERVICE-repo:latest
 
-# cd ./vpc-infra
-# npm run deploy-infra
 
-# cd ../backend
-# npm run deploy-infra
+cd ./base-infra
+npm run deploy-infra
 
-# cd ..
+cd ../vpc-infra
+npm run deploy-infra
+
+cd ../backend
+npm run deploy-infra
+
+cd ..
 

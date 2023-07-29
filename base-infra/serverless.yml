@@ -1,0 +1,104 @@
+service: base-infra
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: ap-south-1
+  stage: ${opt:stage, 'dev'}
+  environment:
+    STAGE: ${self:provider.stage}
+    REGION: ${self:provider.region}
+    COGNITO_USER_POOL_ID: ap-south-1_uyz3W92PZ
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - "cognito-idp:AdminConfirmSignUp"
+          Resource: "*"
+
+functions:
+  cognitoUserSignup:
+    handler: src/functions/cognitoUserSigned.handler
+    events:
+      - cognitoUserPool:
+          pool: staff-demo
+          trigger: PreSignUp
+          existing: true
+    timeout: 10
+    memorySize: 256
+
+resources:
+  Resources:
+    # mainTable:
+    #   Type: AWS::DynamoDB::Table
+    #   Properties:
+    #     AttributeDefinitions:
+    #       - AttributeName: pk
+    #         AttributeType: S
+    #       - AttributeName: sk
+    #         AttributeType: S
+    #       - AttributeName: gsi_pk_1
+    #         AttributeType: S
+    #       - AttributeName: gsi_sk_1
+    #         AttributeType: S
+    #       - AttributeName: gsi_pk_2
+    #         AttributeType: S
+    #       - AttributeName: gsi_sk_2
+    #         AttributeType: S
+    #     BillingMode: PAY_PER_REQUEST
+    #     GlobalSecondaryIndexes:
+    #       - IndexName: gsi_1
+    #         KeySchema:
+    #           - AttributeName: gsi_pk_1
+    #             KeyType: HASH
+    #           - AttributeName: gsi_sk_1
+    #             KeyType: RANGE
+    #         Projection:
+    #           ProjectionType: ALL
+    #       - IndexName: gsi_2
+    #         KeySchema:
+    #           - AttributeName: gsi_pk_2
+    #             KeyType: HASH
+    #           - AttributeName: gsi_sk_2
+    #             KeyType: RANGE
+    #         Projection:
+    #           ProjectionType: ALL
+    #     KeySchema:
+    #       - AttributeName: pk
+    #         KeyType: HASH
+    #       - AttributeName: sk
+    #         KeyType: RANGE
+    #     StreamSpecification:
+    #       StreamViewType: NEW_AND_OLD_IMAGES
+    #     TableName: ${self:provider.stage}-schedule
+
+    # StaffCognitoUserPool:
+    #   Type: AWS::Cognito::UserPool
+    #   Properties:
+    #     UserPoolName: StaffCognitoUserPool
+    #     UsernameAttributes:
+    #       - username
+    #     Policies:
+    #       PasswordPolicy:
+    #         MinimumLength: 8
+    #     LambdaConfig:
+    #       PreSignUp: !GetAtt ${self:functions.cognitoUserSignup}.Arn
+    
+    # StaffCognitoUserPoolClient:
+    #   Type: AWS::Cognito::UserPoolClient
+    #   Properties:
+    #     ClientName: StaffCognitoUserPoolClient
+    #     UserPoolId:
+    #       Ref: StaffCognitoUserPool
+
+    # StaffCognitoUserPoolIdentityProvider:
+    #   Type: AWS::Cognito::UserPoolIdentityProvider
+    #   Properties:
+    #     UserPoolId:
+    #       Ref: StaffCognitoUserPool
+    #     ProviderName: Cognito
+    #     ProviderType: Cognito
+    #     ProviderDetails:
+    #       client_id: !GetAtt StaffCognitoUserPoolClient.ClientId

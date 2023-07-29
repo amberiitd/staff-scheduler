@@ -46,49 +46,6 @@ custom:
 
 resources:
   Resources:
-    mainTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        AttributeDefinitions:
-          - AttributeName: pk
-            AttributeType: S
-          - AttributeName: sk
-            AttributeType: S
-          - AttributeName: gsi_pk_1
-            AttributeType: S
-          - AttributeName: gsi_sk_1
-            AttributeType: S
-          - AttributeName: gsi_pk_2
-            AttributeType: S
-          - AttributeName: gsi_sk_2
-            AttributeType: S
-        BillingMode: PAY_PER_REQUEST
-        GlobalSecondaryIndexes:
-          - IndexName: gsi_1
-            KeySchema:
-              - AttributeName: gsi_pk_1
-                KeyType: HASH
-              - AttributeName: gsi_sk_1
-                KeyType: RANGE
-            Projection:
-              ProjectionType: ALL
-          - IndexName: gsi_2
-            KeySchema:
-              - AttributeName: gsi_pk_2
-                KeyType: HASH
-              - AttributeName: gsi_sk_2
-                KeyType: RANGE
-            Projection:
-              ProjectionType: ALL
-        KeySchema:
-          - AttributeName: pk
-            KeyType: HASH
-          - AttributeName: sk
-            KeyType: RANGE
-        StreamSpecification:
-          StreamViewType: NEW_AND_OLD_IMAGES
-        TableName: ${self:provider.stage}-schedule
-
     StaffSchedulerRole:
       Type: AWS::IAM::Role
       Properties:
