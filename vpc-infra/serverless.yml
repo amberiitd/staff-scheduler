@@ -65,7 +65,7 @@ resources:
         EndpointConfiguration:
           Types:
             - EDGE
-
+# schedule API
     MyApiResource:
       Type: AWS::ApiGateway::Resource
       Properties:
@@ -75,7 +75,7 @@ resources:
           Fn::GetAtt:
             - MyApiGateway
             - RootResourceId
-        PathPart: 'scheduler'
+        PathPart: 'schedule'
     MyGetMethod:
       Type: AWS::ApiGateway::Method
       Properties:
@@ -154,6 +154,121 @@ resources:
               method.response.header.Access-Control-Allow-Headers: true
               method.response.header.Access-Control-Allow-Methods: true
               method.response.header.Access-Control-Allow-Origin: true
+    # User API
+    MyUserApiResource:
+      Type: AWS::ApiGateway::Resource
+      Properties:
+        RestApiId:
+          Ref: MyApiGateway
+        ParentId:
+          Fn::GetAtt:
+            - MyApiGateway
+            - RootResourceId
+        PathPart: 'user'
+    MyUserGetMethod:
+      Type: AWS::ApiGateway::Method
+      Properties:
+        RestApiId:
+          Ref: MyApiGateway
+        ResourceId:
+          Ref: MyUserApiResource
+        HttpMethod: 'GET'
+        AuthorizationType: NONE
+        Integration:
+          Type: HTTP_PROXY
+          IntegrationHttpMethod: GET
+          Uri: !Sub "http://${StaffSchedulerElb.DNSName}/user"
+    MyUserDeleteMethod:
+      Type: AWS::ApiGateway::Method
+      Properties:
+        RestApiId:
+          Ref: MyApiGateway
+        ResourceId:
+          Ref: MyUserApiResource
+        HttpMethod: 'DELETE'
+        AuthorizationType: AWS_IAM
+        Integration:
+          Type: HTTP_PROXY
+          IntegrationHttpMethod: DELETE
+          Uri: !Sub "http://${StaffSchedulerElb.DNSName}/user"
+    MyUserOptionsMethod:
+      Type: AWS::ApiGateway::Method
+      Properties:
+        RestApiId:
+          Ref: MyApiGateway
+        ResourceId:
+          Ref: MyUserApiResource
+        HttpMethod: 'OPTIONS'
+        AuthorizationType: NONE
+        Integration:
+          Type: MOCK
+          IntegrationResponses:
+            - StatusCode: 200
+              ResponseParameters:
+                method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+                method.response.header.Access-Control-Allow-Methods: "'GET,POST,PUT,DELETE,OPTIONS'"
+                method.response.header.Access-Control-Allow-Origin: "'*'"
+          PassthroughBehavior: NEVER
+          RequestTemplates:
+            "application/json": "{\"statusCode\": 200}"
+        MethodResponses:
+          - StatusCode: 200
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: true
+              method.response.header.Access-Control-Allow-Methods: true
+              method.response.header.Access-Control-Allow-Origin: true
+# Analytics API
+    MyAnalyticsApiResource:
+      Type: AWS::ApiGateway::Resource
+      Properties:
+        RestApiId:
+          Ref: MyApiGateway
+        ParentId:
+          Fn::GetAtt:
+            - MyApiGateway
+            - RootResourceId
+        PathPart: 'analytics'
+    MyAnalyticsPostMethod:
+      Type: AWS::ApiGateway::Method
+      Properties:
+        RestApiId:
+          Ref: MyApiGateway
+        ResourceId:
+          Ref: MyAnalyticsApiResource
+        HttpMethod: 'POST'
+        AuthorizationType: AWS_IAM
+        Integration:
+          Type: HTTP_PROXY
+          IntegrationHttpMethod: POST
+          Uri: !Sub "http://${StaffSchedulerElb.DNSName}/analytics"
+
+    MyAnalyticsOptionsMethod:
+      Type: AWS::ApiGateway::Method
+      Properties:
+        RestApiId:
+          Ref: MyApiGateway
+        ResourceId:
+          Ref: MyAnalyticsApiResource
+        HttpMethod: 'OPTIONS'
+        AuthorizationType: NONE
+        Integration:
+          Type: MOCK
+          IntegrationResponses:
+            - StatusCode: 200
+              ResponseParameters:
+                method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+                method.response.header.Access-Control-Allow-Methods: "'GET,POST,PUT,DELETE,OPTIONS'"
+                method.response.header.Access-Control-Allow-Origin: "'*'"
+          PassthroughBehavior: NEVER
+          RequestTemplates:
+            "application/json": "{\"statusCode\": 200}"
+        MethodResponses:
+          - StatusCode: 200
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: true
+              method.response.header.Access-Control-Allow-Methods: true
+              method.response.header.Access-Control-Allow-Origin: true
+
   Outputs:
     StaffSchedulerTargetGroupArn:
       Value:

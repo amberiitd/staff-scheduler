@@ -29,7 +29,7 @@ Amplify.configure({
 		endpoints: [
 			{
 				name: "base_url",
-				endpoint: `${process.env.REACT_APP_BASE_URL}/${process.env.REACT_APP_STAGE}`,
+				endpoint: `${process.env.REACT_APP_BASE_URL}`,
 				region: "ap-south-1",
 			},
       {

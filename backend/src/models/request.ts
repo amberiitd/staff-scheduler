@@ -25,3 +25,8 @@ export type DeleteScheduleRequestPayload = {
 export type DeleteUserRequestPayload = {
   username: string;
 }
+
+export type GetAnalytics1RequestPayload = {
+  startDate: string;
+  endDate: string;
+}

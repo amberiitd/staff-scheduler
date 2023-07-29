@@ -2,6 +2,7 @@ require('dotenv').config(); // load .env file at the topmost
 
 import scheduleRouter from './src/routes/schedule'
 import userRouter  from './src/routes/user'
+import analyticsRouter  from './src/routes/anaytics'
 import express from 'express';
 import bodyParser from 'body-parser'
 import cors from 'cors'
@@ -19,6 +20,7 @@ app.get('/health-check', (req, res) => {
 
 app.use('/schedule', scheduleRouter);
 app.use('/user', userRouter);
+app.use('/analytics', analyticsRouter);
 
 // 404 Resource Not Found handler
 app.use((req, res) => {

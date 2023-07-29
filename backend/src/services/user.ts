@@ -1,14 +1,7 @@
 import AWS from "aws-sdk";
 import { lowerCase } from "lodash";
 import { DeleteUserRequestPayload } from "../models/request";
-
-AWS.config.update({
-	region: process.env.APP_AWS_REGION,
-	accessKeyId: process.env.APP_AWS_ACCESS_KEY_ID,
-	secretAccessKey: process.env.APP_AWS_SECRET_ACCESS_KEY,
-});
-
-const cognito = new AWS.CognitoIdentityServiceProvider();
+import { cognito } from "../config/cognito-client";
 
 export async function getAllUsers() {
 	const params: any = {

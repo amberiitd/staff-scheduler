@@ -17,6 +17,7 @@ import AuthContextProvider, { AuthContext } from "./contexts/auth";
 import LoginPage from "./pages/login";
 import SignupPage from "./pages/signup";
 import UserPage from "./pages/user";
+import AnalyticsPage from "./pages/analytics";
 
 const AuthGuard = ({ children }: { children: any }) => {
 	const { auth } = useContext(AuthContext);
@@ -56,6 +57,14 @@ function App() {
 									element={
 										<AuthGuard>
 											<UserPage />
+										</AuthGuard>
+									}
+								/>
+                <Route
+									path="analytics"
+									element={
+										<AuthGuard>
+											<AnalyticsPage />
 										</AuthGuard>
 									}
 								/>

@@ -4,7 +4,7 @@
   "description": "A demo app to schedule working slots for company resources.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha test/*.test.js",
     "deploy-infra": "sls deploy --aws-profile personal",
     "start": "nodemon ./js/server.js",
     "dev": "tsc; nodemon ./js/server.js"
@@ -18,17 +18,22 @@
     "@types/node": "^18.7.14",
     "aws-sdk": "^2.1422.0",
     "body-parser": "^1.20.2",
+    "chai": "^4.3.7",
+    "chai-as-promised": "^7.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "lodash": "^4.17.21",
+    "mocha": "^10.2.0",
     "moment": "^2.29.4",
     "nodemon": "^3.0.1",
     "serverless": "^3.33.0",
     "serverless-pseudo-parameters": "^2.6.1",
+    "sinon": "^15.2.0",
     "typescript": "^4.8.2"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.13"
+    "@types/cors": "^2.8.13",
+    "@types/jest": "^29.5.3"
   }
 }

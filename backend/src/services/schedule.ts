@@ -10,7 +10,7 @@ import moment from "moment";
 
 const TABLE = process.env.APP_MAIN_TABLE || "";
 
-const dbCallback = (err: any, data: any) => {
+export const dbCallback = (err: any, data: any) => {
 	if (err) {
 		throw err;
 	}
@@ -40,7 +40,7 @@ export async function createSchedule(
 		},
 	};
 	await dynamoDB.put(params, dbCallback).promise();
-	return { sucess: true };
+	return { success: true };
 }
 
 export async function getSchedule(
@@ -67,7 +67,6 @@ export async function getSchedule(
 				":toDate": `day:${endDate}`,
 			},
 		};
-		console.log("params", params);
 		return (await dynamoDB.query(params, dbCallback).promise())["Items"];
 	}
 }

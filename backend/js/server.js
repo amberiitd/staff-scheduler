@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require('dotenv').config(); // load .env file at the topmost
 const schedule_1 = __importDefault(require("./src/routes/schedule"));
 const user_1 = __importDefault(require("./src/routes/user"));
+const anaytics_1 = __importDefault(require("./src/routes/anaytics"));
 const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const cors_1 = __importDefault(require("cors"));
@@ -20,6 +21,7 @@ app.get('/health-check', (req, res) => {
 });
 app.use('/schedule', schedule_1.default);
 app.use('/user', user_1.default);
+app.use('/analytics', anaytics_1.default);
 // 404 Resource Not Found handler
 app.use((req, res) => {
     res.status(404).json({ error: 'Resource Not Found update 2' });

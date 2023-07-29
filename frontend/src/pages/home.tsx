@@ -50,7 +50,7 @@ const HomePage = () => {
 
 	const getSlots = (start: string, end: string) => {
 		setError("");
-		API.post("base_url", "/schedule", {
+		API.post("local", "/schedule", {
 			body: {
 				userId: selectedUser,
 				startDate: start,
@@ -66,7 +66,7 @@ const HomePage = () => {
 	};
 	useEffect(() => {
 		setError("");
-		API.get("base_url", "/user", {})
+		API.get("local", "/user", {})
 			.then((data) => {
 				setUsers(data);
 			})
@@ -114,7 +114,7 @@ const HomePage = () => {
 							onSubmit={handleSubmit((data) => {
 								console.log(data);
 								setError("");
-								API.put("base_url", "/schedule", {
+								API.put("local", "/schedule", {
 									body: {
 										userId: selectedUser,
 										date: data.date,
@@ -266,7 +266,7 @@ const HomePage = () => {
 													onClick={() => {
 														setError("");
 														API.del(
-															"base_url",
+															"local",
 															"/schedule",
 															{
 																body: {

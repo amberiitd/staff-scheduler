@@ -26,7 +26,7 @@ const AppNavBar: FC<{ search?: boolean; profile?: boolean }> = (props) => {
 		() => [
 			{ label: "Home", href: "/home", disabled: false },
 			...(auth.user?.role === "staff-admin-role"
-				? [{ label: "User", href: "/user", disabled: false }]
+				? [{ label: "User", href: "/user", disabled: false }, { label: "Analytics", href: "/analytics", disabled: false }]
 				: []),
 		],
 		[auth]

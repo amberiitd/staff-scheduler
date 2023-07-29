@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteSchedule = exports.getSchedule = exports.createSchedule = void 0;
+exports.deleteSchedule = exports.getSchedule = exports.createSchedule = exports.dbCallback = void 0;
 const lodash_1 = require("lodash");
 const dynamodb_client_1 = require("../config/dynamodb-client");
 const validations_1 = require("../util/validations");
@@ -24,6 +24,7 @@ const dbCallback = (err, data) => {
     }
     return data;
 };
+exports.dbCallback = dbCallback;
 function createSchedule({ userId, hours, date } = { hours: 0 }) {
     return __awaiter(this, void 0, void 0, function* () {
         if ((0, lodash_1.isEmpty)(userId) || !(0, validations_1.validateDateString)(date)) {
@@ -44,8 +45,8 @@ function createSchedule({ userId, hours, date } = { hours: 0 }) {
                 itemType: "schedule",
             },
         };
-        yield dynamodb_client_1.dynamoDB.put(params, dbCallback).promise();
-        return { sucess: true };
+        yield dynamodb_client_1.dynamoDB.put(params, exports.dbCallback).promise();
+        return { success: true };
     });
 }
 exports.createSchedule = createSchedule;
@@ -67,8 +68,7 @@ function getSchedule({ userId, startDate, endDate } = {
                     ":fromDate": `day:${startDate}`,
                     ":toDate": `day:${endDate}`,
                 } });
-            console.log("params", params);
-            return (yield dynamodb_client_1.dynamoDB.query(params, dbCallback).promise())["Items"];
+            return (yield dynamodb_client_1.dynamoDB.query(params, exports.dbCallback).promise())["Items"];
         }
     });
 }
