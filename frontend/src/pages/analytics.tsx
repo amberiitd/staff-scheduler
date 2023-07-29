@@ -34,7 +34,7 @@ const AnalyticsPage = () => {
 	const getAggregate = useCallback(
 		async (startDate: string, endDate: string) => {
 			setError("");
-			API.post("local", "/analytics", {
+			API.post("base_url", "/analytics", {
 				body: {
 					startDate,
 					endDate,

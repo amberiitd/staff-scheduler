@@ -1,9 +1,9 @@
 FROM node:14
 
-WORKDIR /js
+WORKDIR /root
 
 COPY /js ./js
-COPY package.json package-lock.json .env ./
+COPY package.json package-lock.json .env swagger.yml ./
 
 RUN npm install
 

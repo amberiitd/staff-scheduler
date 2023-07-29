@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha test/*.test.js",
     "deploy-infra": "sls deploy --aws-profile personal",
-    "start": "nodemon ./js/server.js",
+    "start": "cp ./swagger.yml ./js/swagger.yml; node ./js/server.js",
     "dev": "tsc; cp ./swagger.yml ./js/swagger.yml; nodemon ./js/server.js"
   },
   "author": "amberiitd",
