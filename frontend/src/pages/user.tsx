@@ -23,7 +23,7 @@ const UserPage = () => {
 
 	const getUser = useCallback(async () => {
 		setError("");
-		API.get("local", "/user", {})
+		API.get("base_url", "/user", {})
 			.then((data) => {
 				setUsers(
 					data.filter((u: any) => u.username !== auth.user?.username)
@@ -70,7 +70,7 @@ const UserPage = () => {
 										size="small"
 										onClick={() => {
 											setError("");
-											API.del("local", "/user", {
+											API.del("base_url", "/user", {
 												body: {
 													username: row.username,
 												},

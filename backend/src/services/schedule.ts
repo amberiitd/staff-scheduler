@@ -34,6 +34,8 @@ export async function createSchedule(
 			sk: `day:${parsedDate}`,
 			scheduleDate: parsedDate,
 			hours,
+      gsi_pk_1: `day:${parsedDate}`,
+      gsi_sk_1: 'schedule',
 			itemType: "schedule",
 		},
 	};
