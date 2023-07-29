@@ -5,16 +5,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 require('dotenv').config(); // load .env file at the topmost
 const schedule_1 = __importDefault(require("./src/routes/schedule"));
+const user_1 = __importDefault(require("./src/routes/user"));
 const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
+const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
 app.use(body_parser_1.default.json());
+app.use((0, cors_1.default)({
+    methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH'],
+    origin: '*'
+}));
 app.get('/health-check', (req, res) => {
     res.status(200).json({ status: 200 });
 });
 app.use('/schedule', schedule_1.default);
+app.use('/user', user_1.default);
 // 404 Resource Not Found handler
 app.use((req, res) => {
-    res.status(404).json({ error: 'Resource Not Found' });
+    res.status(404).json({ error: 'Resource Not Found update 2' });
 });
 app.listen(8080);

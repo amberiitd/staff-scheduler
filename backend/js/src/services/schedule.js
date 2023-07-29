@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getSchedule = exports.createSchedule = void 0;
+exports.deleteSchedule = exports.getSchedule = exports.createSchedule = void 0;
 const lodash_1 = require("lodash");
 const dynamodb_client_1 = require("../config/dynamodb-client");
 const validations_1 = require("../util/validations");
@@ -24,7 +24,7 @@ const dbCallback = (err, data) => {
     }
     return data;
 };
-function createSchedule({ userId, slots, date } = {}) {
+function createSchedule({ userId, hours, date } = { hours: 0 }) {
     return __awaiter(this, void 0, void 0, function* () {
         if ((0, lodash_1.isEmpty)(userId) || !(0, validations_1.validateDateString)(date)) {
             throw Error("IncorrectPayload");
@@ -37,11 +37,8 @@ function createSchedule({ userId, slots, date } = {}) {
             Item: {
                 pk: `uid:${userId}`,
                 sk: `day:${parsedDate}`,
-                slots: (0, lodash_1.isEmpty)(slots)
-                    ? []
-                    : !Array.isArray(slots)
-                        ? [slots]
-                        : slots,
+                scheduleDate: parsedDate,
+                hours,
                 itemType: "schedule",
             },
         };
@@ -50,23 +47,49 @@ function createSchedule({ userId, slots, date } = {}) {
     });
 }
 exports.createSchedule = createSchedule;
-function getSchedule({ userId } = {}) {
+function getSchedule({ userId, startDate, endDate } = {
+    userId: "",
+    startDate: (0, moment_1.default)().format("YYYY-MM-DD"),
+    endDate: (0, moment_1.default)().add("days", 360).format("YYYY-MM-DD"),
+}) {
     return __awaiter(this, void 0, void 0, function* () {
         var params = {
             TableName: TABLE,
         };
-        if ((0, lodash_1.isEmpty)(userId)) {
-            params = Object.assign(Object.assign({}, params), { FilterExpression: "itemType = :itemType", ExpressionAttributeValues: { ":itemType": "schedule" }, Limit: 20 });
-            console.log("params", params);
-            return yield dynamodb_client_1.dynamoDB.scan(params, dbCallback).promise();
+        if ((0, lodash_1.isEmpty)(userId) || startDate > endDate) {
+            return [];
         }
         else {
-            params = Object.assign(Object.assign({}, params), { KeyConditionExpression: "pk= :pk", ExpressionAttributeValues: {
+            params = Object.assign(Object.assign({}, params), { KeyConditionExpression: "pk= :pk and sk BETWEEN :fromDate AND :toDate", ExpressionAttributeValues: {
                     ":pk": `uid:${userId}`,
+                    ":fromDate": `day:${startDate}`,
+                    ":toDate": `day:${endDate}`,
                 } });
             console.log("params", params);
-            return yield dynamodb_client_1.dynamoDB.query(params, dbCallback).promise();
+            return (yield dynamodb_client_1.dynamoDB.query(params, dbCallback).promise())["Items"];
         }
     });
 }
 exports.getSchedule = getSchedule;
+function deleteSchedule({ userId, scheduleDate }) {
+    return __awaiter(this, void 0, void 0, function* () {
+        var params = {
+            TableName: TABLE,
+        };
+        if ((0, lodash_1.isEmpty)(userId) || !scheduleDate) {
+            return [];
+        }
+        else {
+            const params = {
+                TableName: TABLE,
+                Key: {
+                    pk: `uid:${userId}`,
+                    sk: `day:${scheduleDate}`,
+                },
+            };
+            yield dynamodb_client_1.dynamoDB.delete(params).promise();
+            return { success: true };
+        }
+    });
+}
+exports.deleteSchedule = deleteSchedule;

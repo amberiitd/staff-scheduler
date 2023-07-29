@@ -1,24 +1,17 @@
 import { Box, colors, InputBase, IconButton, TextField } from "@mui/material";
 import { FC, useContext, useMemo, useRef, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
-import { ShopPageContext } from "../pages/shop";
 import { useTheme } from "@emotion/react";
 import { tokens } from "../contexts/theme";
 
 const SearchBar: FC = () => {
-	const { searchString, setSearchString } = useContext(ShopPageContext);
+	const [searchString, setSearchString] = useState('');
 	const theme: any = useTheme();
 	const colors = useMemo(() => tokens(theme.palette.mode), [theme]);
 	const [focus, setFocus] = useState(false);
 	return (
 		<Box
 			display="flex"
-			borderRadius="3px"
-      border={focus ? `1px solid ${colors.primary[100]}` : `1px solid ${colors.grey[800]}`}
-      marginLeft={10}
-			marginRight={10}
-			// paddingTop={3}
-			// paddingBottom={3}
 		>
 			<InputBase
 				onFocus={() => setFocus(true)}

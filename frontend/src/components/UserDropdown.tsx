@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { useTheme } from "@emotion/react";
 import TextCopy from "./TextCopy";
 import { tokens } from "../contexts/theme";
+import { AuthContext } from "../contexts/auth";
 
 // ** Styled Components
 const BadgeContentSpan = styled("span")(({ theme }) => ({
@@ -34,7 +35,7 @@ const UserDropdown: FC = (props) => {
 	const theme: any = useTheme();
 	const colors = useMemo(() => tokens(theme.palette.mode), [theme]);
 	const navigate = useNavigate();
-
+	const { logout, auth } = useContext(AuthContext);
 	// ** States
 	const [anchorEl, setAnchorEl] = useState(null);
 	const handleDropdownOpen = (event: any) => {
@@ -80,7 +81,7 @@ const UserDropdown: FC = (props) => {
 					sx={{
 						width: 35,
 						height: 35,
-						border: `1px solid ${colors.grey[900]}`,
+						border: `1px solid ${colors.primary[900]}`,
 					}}
 					src={`${process.env.PUBLIC_URL}/assets/user-icon.png`}
 				/>
@@ -101,16 +102,19 @@ const UserDropdown: FC = (props) => {
 							sx={{
 								width: 35,
 								height: 35,
-								border: `1px solid ${colors.grey[900]}`,
+								border: `1px solid ${colors.primary[900]}`,
 							}}
 							src={`${process.env.PUBLIC_URL}/assets/user-icon.png`}
 						/>
 						<Box sx={{ width: "calc(100% - 39px)", ml: 1 }}>
-							<Box display='flex'>
-								<Typography className="text-cut" fontSize='small'>
-									Customer Name
+							<Box display="flex">
+								<Typography
+									className="text-cut"
+									fontSize="small"
+								>
+									{auth.user?.username}
 								</Typography>
-								<TextCopy text={'Customer Name'} />
+								<TextCopy text={"Customer Name"} />
 							</Box>
 							<Typography
 								variant="body2"
@@ -119,7 +123,7 @@ const UserDropdown: FC = (props) => {
 									color: "text.disabled",
 								}}
 							>
-								User
+								{auth.user?.role}
 							</Typography>
 						</Box>
 					</Box>
@@ -139,7 +143,7 @@ const UserDropdown: FC = (props) => {
         </MenuItem> */}
 				{/* <Divider /> */}
 				<MenuItem
-					// onClick={() => setAccount(undefined)}
+					onClick={() => logout()}
 					sx={{
 						py: 2,
 						"& svg": {

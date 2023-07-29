@@ -1,5 +1,4 @@
 export const navLinks = [
-	{ label: "Home", href: "/home", disabled: true },
-	{ label: "Shop", href: "/shop", disabled: false },
-	{ label: "About", href: "/about", disabled: true },
+	{ label: "Home", href: "/home", disabled: false },
+  { label: "User", href: "/user", disabled: false },
 ];

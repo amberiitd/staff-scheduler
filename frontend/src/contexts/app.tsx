@@ -13,32 +13,12 @@ export type BaseProduct = {
 		count: number;
 	};
 };
-export type CartProduct = {id: number; count?: number; size?: ProductSize};
-export const AppContext = createContext<{
-	productsInCart: CartProduct[];
-	setProductsInCart: React.Dispatch<React.SetStateAction<CartProduct[]>>;
-	productList: BaseProduct[];
-	setProductList: React.Dispatch<React.SetStateAction<BaseProduct[]>>;
-}>({
-	productsInCart: [],
-	setProductsInCart: noop,
-	productList: [],
-	setProductList: noop,
-});
+export type CartProduct = { id: number; count?: number; size?: ProductSize };
+export const AppContext = createContext<{}>({});
 const AppContextProvider: FC<{ children: any }> = ({ children }) => {
-	const [productsInCart, setProductsInCart] = useState<CartProduct[]>([]);
-	const [productList, setProductList] = useState<BaseProduct[]>([]);
-
 	return (
-		<AppContext.Provider
-			value={{
-				productList,
-				setProductList,
-				productsInCart,
-				setProductsInCart,
-			}}
-		>
-			{children}
+		<AppContext.Provider value={{}}>
+				{children}
 		</AppContext.Provider>
 	);
 };

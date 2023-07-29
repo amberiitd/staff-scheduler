@@ -6,13 +6,22 @@ type Interval = {
 export type PutScheduleRequestPayload = {
 	userId: string;
   date: string;
-	slots: Interval | Interval[];
+	hours: number;
 };
 
 export type GetScheduleRequestPayload = {
-  userId?: string;
-  startTimeStamp?: number;
-  endTimeStamp?: number;
+  userId: string;
+  startDate: string;
+  endDate: string;
   limit?: number;
   offset?: number; 
+}
+
+export type DeleteScheduleRequestPayload = {
+  userId: string;
+  scheduleDate: string;
+}
+
+export type DeleteUserRequestPayload = {
+  username: string;
 }
