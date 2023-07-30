@@ -7,7 +7,7 @@ The Staff Scheduler project is a web application designed to help organizations 
 
 ## Video Demo: 
 
-- https://drive.google.com/file/d/1DNXkojdPDjPZcdwzKbkhn1flbXhaX0j4/view?usp=sharing
+- https://vimeo.com/849865386?share=copy
 
 ## Live Demo
 - Go to https://staff-scheduler-6e8be.web.app/login 
@@ -21,6 +21,7 @@ The Staff Scheduler project is a web application designed to help organizations 
 ## Open API documentation:
 
 - Go to http://stf-sch-infra-elb-1776549517.ap-south-1.elb.amazonaws.com/api-docs
+- NOTE: Service may not be available after some times. Please reach out via email to ###amberiitd15@gmail.com### regarding such issues.
 
 
 ## Features
