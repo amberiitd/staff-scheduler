@@ -7,6 +7,7 @@ The Staff Scheduler project is a web application designed to help organizations 
 
 ## Video Demo: 
 
+- https://drive.google.com/file/d/1DNXkojdPDjPZcdwzKbkhn1flbXhaX0j4/view?usp=sharing
 
 ## Live Demo
 - Go to https://staff-scheduler-6e8be.web.app/login 
