@@ -21,7 +21,7 @@ The Staff Scheduler project is a web application designed to help organizations 
 ## Open API documentation:
 
 - Go to http://stf-sch-infra-elb-1776549517.ap-south-1.elb.amazonaws.com/api-docs
-- NOTE: Service may not be available after some times. Please reach out via email to ###amberiitd15@gmail.com### regarding such issues.
+- NOTE: Service may not be available after some times. Please reach out via email to amberiitd15@gmail.com regarding such issues.
 
 
 ## Features
