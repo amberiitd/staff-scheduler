@@ -2,6 +2,9 @@
 
 The Staff Scheduler project is a web application designed to help organizations efficiently manage staff schedules. It allows you to create, update, and delete schedules for individual staff members, providing a comprehensive overview of all scheduled activities.
 
+## Git Repo: 
+- https://github.com/amberiitd/staff-scheduler
+
 ## Video Demo: 
 
 
