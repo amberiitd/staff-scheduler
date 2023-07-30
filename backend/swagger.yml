@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: Staff Scheduler Service
   version: 1.0.0
-  description: API for managgin staff schedules
+  description: API for managing staff schedules
 
 paths:
   /analytics:

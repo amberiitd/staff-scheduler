@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy-infra": "sls deploy --aws-profile personal"
+    "deploy-infra": "sls deploy --aws-profile nazish"
   },
   "keywords": [],
   "author": "",

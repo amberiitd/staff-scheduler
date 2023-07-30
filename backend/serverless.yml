@@ -9,7 +9,6 @@ provider:
   environment:
     STAGE: ${self:provider.stage}
     REGION: ${self:provider.region}
-    HTTP_ENDPOINT: 'http://13.127.2.248/schedule'
 
 plugins:
   - '@hybridless/serverless-ecs-plugin'
@@ -17,8 +16,8 @@ plugins:
 
 custom:
   aws:
-    profile: personal
-    accountId: 343547439778
+    profile: nazish
+    accountId: 730746788960
   service: 
     port: 8080
   ecs:
@@ -132,11 +131,11 @@ resources:
           AwsvpcConfiguration:
             AssignPublicIp: ENABLED  # Choose "ENABLED" or "DISABLED" based on your requirements
             Subnets:
-              - subnet-0f2f0f3511b92435f
-              - subnet-03130abf6efde5935
-              - subnet-0b25b3474b72782cf
+              - subnet-77c2793b
+              - subnet-baa2e8d2
+              - subnet-9a17d2e1
             SecurityGroups:
-              - sg-0976513226a6d611a
+              - sg-099c66a6a74f51c4e
 
     MyApiDeployment:
       Type: AWS::ApiGateway::Deployment

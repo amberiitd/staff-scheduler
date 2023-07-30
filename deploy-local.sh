@@ -1,7 +1,7 @@
-export AWS_ACCOUNT_ID=343547439778
+export AWS_ACCOUNT_ID=730746788960
 export SERVICE=staff-scheduler
 export REGION=ap-south-1
-export AWS_PROFILE=personal
+export AWS_PROFILE=nazish
 
 cd ./base-infra
 npm run deploy-infra
